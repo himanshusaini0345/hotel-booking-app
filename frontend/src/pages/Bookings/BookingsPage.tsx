@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { fetchBookings, fetchBookedUsers } from '../../api/booking.api';
-import { fetchUsers } from '../../api/user.api';
 import { fetchHotels } from '../../api/hotel.api';
 import ReusableTable from '../../components/ReusableTable';
 import ReusableFilter from '../../components/ReusableFilter';
@@ -18,7 +17,7 @@ const BookingsPage = () => {
         sortOrder: null,
     });
     
-    const [filterParams, setFilterParams] = useState({});
+    const [filterParams, setFilterParams] = useState<any>({});
 
     const sortParams = lazyParams.sortField ? { 
         sort: `${lazyParams.sortOrder === 1 ? '' : '-'}${lazyParams.sortField}` 
@@ -32,7 +31,7 @@ const BookingsPage = () => {
             ...sortParams,
             ...filterParams
         }),
-        keepPreviousData: true
+        placeholderData: (previousData: any) => previousData
     });
 
     const { data: usersData } = useQuery({
@@ -45,7 +44,7 @@ const BookingsPage = () => {
         queryFn: () => fetchHotels({ download: 'true' })
     });
 
-    const getStatusSeverity = (status) => {
+    const getStatusSeverity = (status: any) => {
         switch (status) {
             case 0: return 'info'; // Confirmed
             case 1: return 'danger'; // Cancelled
@@ -54,7 +53,7 @@ const BookingsPage = () => {
         }
     };
 
-    const getStatusLabel = (status) => {
+    const getStatusLabel = (status: any) => {
         switch (status) {
             case 0: return 'Confirmed';
             case 1: return 'Cancelled';
@@ -68,29 +67,29 @@ const BookingsPage = () => {
             field: 'userId.name', 
             header: 'Guest Name', 
             sortable: false,
-            body: (rowData) => rowData.userId?.name || 'N/A'
+            body: (rowData: any) => rowData.userId?.name || 'N/A'
         },
         { 
             field: 'hotelId.name', 
             header: 'Hotel Name', 
             sortable: false,
-            body: (rowData) => rowData.hotelId?.name || 'N/A'
+            body: (rowData: any) => rowData.hotelId?.name || 'N/A'
         },
         { 
             field: 'checkInDate', 
             header: 'Check-in Date', 
             sortable: true,
-            body: (rowData) => new Date(rowData.checkInDate).toLocaleDateString()
+            body: (rowData: any) => new Date(rowData.checkInDate).toLocaleDateString()
         },
         { 
             field: 'status', 
             header: 'Status', 
             sortable: true,
-            body: (rowData) => <Tag severity={getStatusSeverity(rowData.status)} value={getStatusLabel(rowData.status)} />
+            body: (rowData: any) => <Tag severity={getStatusSeverity(rowData.status)} value={getStatusLabel(rowData.status)} />
         },
     ];
 
-    const formatOptions = (arr, labelKey = 'name') => arr && arr.data ? arr.data.map(item => ({ label: item[labelKey], value: item.id })) : [];
+    const formatOptions = (arr: any, labelKey: string = 'name') => arr && arr.data ? arr.data.map((item: any) => ({ label: item[labelKey], value: item.id })) : [];
 
     // Assuming we extract available users from the loaded users.
     const filtersConfig = [
@@ -102,7 +101,7 @@ const BookingsPage = () => {
 
     const exportBookings = async () => {
         // Fetch all filtered data
-        let exportFilters = { ...filterParams, download: 'true' };
+        let exportFilters: any = { ...filterParams, download: 'true' };
         if (sortParams.sort) exportFilters.sort = sortParams.sort;
         
         try {
@@ -133,7 +132,7 @@ const BookingsPage = () => {
             
             <ReusableFilter 
                 filtersConfig={filtersConfig} 
-                onApply={(filters) => {
+                onApply={(filters: any) => {
                     // map calendar-range to startDate, endDate
                     const processed = {...filters};
                     if (filters.checkInDate && filters.checkInDate.length === 2) {
@@ -152,9 +151,9 @@ const BookingsPage = () => {
             
             <ReusableTable 
                 columns={columns}
-                data={bookingsData?.data || []}
+                data={(bookingsData as any)?.data || []}
                 loading={bookingsLoading || bookingsFetching}
-                totalRecords={bookingsData?.total || 0}
+                totalRecords={(bookingsData as any)?.total || 0}
                 lazyParams={lazyParams}
                 setLazyParams={setLazyParams}
             />

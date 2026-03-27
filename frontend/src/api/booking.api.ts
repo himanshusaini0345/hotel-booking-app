@@ -1,7 +1,7 @@
 import api from './axios';
 
-export const fetchBookings = async (params, isDownload = false) => {
-    const config = { params };
+export const fetchBookings = async (params: any, isDownload: boolean = false) => {
+    const config: any = { params };
     if (isDownload) {
         config.responseType = 'blob';
     }
@@ -9,12 +9,12 @@ export const fetchBookings = async (params, isDownload = false) => {
     return isDownload ? response : response.data;
 };
 
-export const createBooking = async (payload) => {
+export const createBooking = async (payload: any) => {
     const { data } = await api.post('/bookings/createBooking', payload);
     return data;
 };
 
-export const cancelBooking = async (bookingId) => {
+export const cancelBooking = async (bookingId: string | number) => {
     const { data } = await api.post(`/bookings/${bookingId}/cancel`);
     return data;
 };

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { fetchUsers } from '../../api/user.api';
 import ReusableTable from '../../components/ReusableTable';
@@ -18,7 +18,7 @@ const UsersPage = () => {
         sort: `${lazyParams.sortOrder === 1 ? '' : '-'}${lazyParams.sortField}` 
     } : {};
 
-    const [filterParams, setFilterParams] = useState({});
+    const [filterParams, setFilterParams] = useState<any>({});
 
     const { data, isLoading, isFetching } = useQuery({
         queryKey: ['users', lazyParams.page, lazyParams.rows, sortParams, filterParams],
@@ -28,7 +28,7 @@ const UsersPage = () => {
             ...sortParams,
             ...filterParams
         }),
-        keepPreviousData: true
+        placeholderData: (previousData: any) => previousData
     });
 
     const columns = [
@@ -39,7 +39,7 @@ const UsersPage = () => {
             field: 'createdAt', 
             header: 'Created Date', 
             sortable: true,
-            body: (rowData) => new Date(rowData.createdAt).toLocaleDateString()
+            body: (rowData: any) => new Date(rowData.createdAt).toLocaleDateString()
         }
     ];
 
@@ -52,7 +52,7 @@ const UsersPage = () => {
             <h2>Users Hub</h2>
             <ReusableFilter 
                 filtersConfig={filtersConfig} 
-                onApply={(filters) => {
+                onApply={(filters: any) => {
                     setFilterParams(filters);
                     setLazyParams(prev => ({ ...prev, first: 0, page: 1 }));
                 }} 
@@ -63,9 +63,9 @@ const UsersPage = () => {
             />
             <ReusableTable 
                 columns={columns}
-                data={data?.data || []}
+                data={(data as any)?.data || []}
                 loading={isLoading || isFetching}
-                totalRecords={data?.total || 0}
+                totalRecords={(data as any)?.total || 0}
                 lazyParams={lazyParams}
                 setLazyParams={setLazyParams}
             />

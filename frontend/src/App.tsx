@@ -1,4 +1,3 @@
-import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { TabMenu } from 'primereact/tabmenu';
 import { useNavigate, useLocation } from 'react-router-dom';

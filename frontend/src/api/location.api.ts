@@ -5,7 +5,7 @@ export const fetchStates = async () => {
     return data;
 };
 
-export const fetchCities = async (stateId) => {
+export const fetchCities = async (stateId?: string | number) => {
     const params = stateId ? { stateId } : {};
     const { data } = await api.get('/city', { params });
     return data;

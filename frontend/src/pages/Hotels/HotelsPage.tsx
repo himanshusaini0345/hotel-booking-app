@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { fetchHotels } from '../../api/hotel.api';
 import { fetchStates, fetchCities } from '../../api/location.api';
@@ -15,7 +15,7 @@ const HotelsPage = () => {
         sortOrder: null,
     });
     
-    const [filterParams, setFilterParams] = useState({});
+    const [filterParams, setFilterParams] = useState<any>({});
 
     const sortParams = lazyParams.sortField ? { 
         sort: `${lazyParams.sortOrder === 1 ? '' : '-'}${lazyParams.sortField}` 
@@ -29,7 +29,7 @@ const HotelsPage = () => {
             ...sortParams,
             ...filterParams
         }),
-        keepPreviousData: true
+        placeholderData: (previousData: any) => previousData
     });
 
     const { data: statesRes } = useQuery({
@@ -51,18 +51,18 @@ const HotelsPage = () => {
             field: 'cityId.name', 
             header: 'City', 
             sortable: false,
-            body: (rowData) => rowData.cityId?.name || 'N/A'
+            body: (rowData: any) => rowData.cityId?.name || 'N/A'
         },
         { field: 'rating', header: 'Rating', sortable: true },
         { 
             field: 'isActive', 
             header: 'Status', 
             sortable: true,
-            body: (rowData) => <Tag severity={rowData.isActive ? 'success' : 'danger'} value={rowData.isActive ? 'Active' : 'Inactive'} />
+            body: (rowData: any) => <Tag severity={rowData.isActive ? 'success' : 'danger'} value={rowData.isActive ? 'Active' : 'Inactive'} />
         }
     ];
 
-    const formatFilterOptions = (arr) => arr ? arr.map(item => ({ label: item.name, value: item.id })) : [];
+    const formatFilterOptions = (arr: any) => arr ? arr.map((item: any) => ({ label: item.name, value: item.id })) : [];
 
     const filtersConfig = [
         { name: 'search', type: 'text', label: 'Search Hotel' },
@@ -77,7 +77,7 @@ const HotelsPage = () => {
             <h2>Hotels Portfolio</h2>
             <ReusableFilter 
                 filtersConfig={filtersConfig} 
-                onApply={(filters) => {
+                onApply={(filters: any) => {
                     setFilterParams(filters);
                     setLazyParams(prev => ({ ...prev, first: 0, page: 1 }));
                 }} 
@@ -88,9 +88,9 @@ const HotelsPage = () => {
             />
             <ReusableTable 
                 columns={columns}
-                data={hotelsData?.data || []}
+                data={(hotelsData as any)?.data || []}
                 loading={hotelsLoading || hotelsFetching}
-                totalRecords={hotelsData?.total || 0}
+                totalRecords={(hotelsData as any)?.total || 0}
                 lazyParams={lazyParams}
                 setLazyParams={setLazyParams}
             />

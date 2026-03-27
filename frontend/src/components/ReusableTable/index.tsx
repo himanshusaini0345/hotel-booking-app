@@ -3,7 +3,17 @@ import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { ProgressSpinner } from 'primereact/progressspinner';
 
-const ReusableTable = ({ 
+interface ReusableTableProps {
+    columns: any[];
+    data: any[];
+    loading: boolean;
+    totalRecords: number;
+    lazyParams: any;
+    setLazyParams: (params: any) => void;
+    emptyMessage?: string;
+}
+
+const ReusableTable: React.FC<ReusableTableProps> = ({ 
     columns, 
     data, 
     loading, 
@@ -13,7 +23,7 @@ const ReusableTable = ({
     emptyMessage = "No records found" 
 }) => {
 
-    const onPage = (event) => {
+    const onPage = (event: any) => {
         setLazyParams({
             ...lazyParams,
             first: event.first,
@@ -22,7 +32,7 @@ const ReusableTable = ({
         });
     };
 
-    const onSort = (event) => {
+    const onSort = (event: any) => {
         setLazyParams({
             ...lazyParams,
             sortField: event.sortField,

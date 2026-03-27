@@ -4,7 +4,13 @@ import { Dropdown } from 'primereact/dropdown';
 import { Calendar } from 'primereact/calendar';
 import { Button } from 'primereact/button';
 
-const ReusableFilter = ({ filtersConfig, onApply, onClear }) => {
+interface ReusableFilterProps {
+    filtersConfig: any[];
+    onApply: (values: any) => void;
+    onClear: () => void;
+}
+
+const ReusableFilter: React.FC<ReusableFilterProps> = ({ filtersConfig, onApply, onClear }) => {
     const [filterValues, setFilterValues] = useState({});
 
     const handleApply = () => {
@@ -16,7 +22,7 @@ const ReusableFilter = ({ filtersConfig, onApply, onClear }) => {
         onClear();
     };
 
-    const renderFilter = (config) => {
+    const renderFilter = (config: any) => {
         const { type, name, label, options } = config;
 
         switch (type) {
