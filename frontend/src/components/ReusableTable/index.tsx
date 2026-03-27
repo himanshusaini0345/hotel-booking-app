@@ -54,7 +54,7 @@ const ReusableTable: React.FC<ReusableTableProps> = ({
                 sortField={lazyParams.sortField}
                 sortOrder={lazyParams.sortOrder}
                 loading={loading}
-                loadingIcon={<ProgressSpinner style={{ width: '50px', height: '50px' }} strokeWidth="8" fill="var(--surface-ground)" animationDuration=".5s" />}
+                loadingIcon={<ProgressSpinner style={{ width: '50px', height: '50px' }} strokeWidth="4" fill="transparent" animationDuration="1.5s" />}
                 emptyMessage={emptyMessage}
                 responsiveLayout="scroll"
                 rowsPerPageOptions={[5, 10, 20]}
