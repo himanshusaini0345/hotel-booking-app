@@ -28,7 +28,7 @@ npm install
 ```
 3. (Optional) Run the database seed script to populate sample Users, Hotels, and Bookings:
 ```bash
-node seed.js
+npm run seed
 ```
 4. Start the backend server:
 ```bash
@@ -52,15 +52,17 @@ npm run dev
 *(Runs on `http://localhost:5173`)*
 
 ## API Documentation Overview
-| Method | Endpoint                     | Description                                         |
-|--------|------------------------------|-----------------------------------------------------|
-| GET    | `/api/users/getUserList`     | Fetch users (Pagination, Sort, Search filters)      |
-| GET    | `/api/hotels/getHotelList`   | Fetch hotels (Pagination, Sort, Status/Loc filters) |
-| GET    | `/api/state`                 | Fetch states for dropdown filters                   |
-| GET    | `/api/city`                  | Fetch cities mapped by stateId                      |
-| GET    | `/api/bookings/getBookings`  | Fetch populated bookings (Supports Excel download)  |
-| POST   | `/api/bookings/createBooking`| Create booking (Validates 9PM rule and duplicates)  |
-| POST   | `/api/bookings/:id/cancel`   | Update booking status to cancelled (1)              |
+| Method | Endpoint                        | Description                                         |
+|--------|---------------------------------|-----------------------------------------------------|
+| GET    | `/api/users/getUserList`        | Fetch users (Pagination, Sort, Search filters)      |
+| GET    | `/api/hotels/getHotelList`      | Fetch hotels (Pagination, Sort, Status/Loc filters) |
+| GET    | `/api/state`                    | Fetch states for dropdown filters                   |
+| GET    | `/api/city`                     | Fetch cities mapped by stateId                      |
+| GET    | `/api/bookings/getBookings`     | Fetch populated bookings (Supports Excel download)  |
+| GET    | `/api/bookings/getBookedUsers`  | Fetch list of users who have active bookings        |
+| POST   | `/api/bookings/createBooking`   | Create booking (Validates 9PM rule and duplicates)  |
+| POST   | `/api/bookings/:bookingId/cancel`| Update booking status to cancelled (1)              |
+| GET    | `/api-docs`                     | Swagger API Documentation                           |
 
 ## Architectural Notes
 - **React Query** handles data fetching states (Loading, Error, Refetch).
