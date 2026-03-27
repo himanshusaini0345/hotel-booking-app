@@ -58,11 +58,10 @@ exports.createBooking = async (req, res, next) => {
     const requestedDate = new Date(checkInDate);
     const now = new Date();
     
-    // Check if the booking is for tomorrow, and if it's past 9 PM today
+    // 9 PM Rule: Cannot book for the next day after 9 PM today
     const tomorrow = new Date(now);
     tomorrow.setDate(tomorrow.getDate() + 1);
     
-    // Normalize dates to ignore time component for comparison
     const normRequested = new Date(requestedDate.getFullYear(), requestedDate.getMonth(), requestedDate.getDate());
     const normTomorrow = new Date(tomorrow.getFullYear(), tomorrow.getMonth(), tomorrow.getDate());
     
@@ -75,8 +74,7 @@ exports.createBooking = async (req, res, next) => {
       }
     }
 
-    // Check for duplicates
-    // Same hotel, same day, same user
+    // Duplicate Check: Same hotel, same day, same user (excluding cancelled)
     const duplicateBooking = await Booking.findOne({
       userId,
       hotelId,
@@ -84,13 +82,13 @@ exports.createBooking = async (req, res, next) => {
         $gte: normRequested,
         $lt: new Date(normRequested.getTime() + 24 * 60 * 60 * 1000)
       },
-      status: { $in: [0, 2] } // Exclude cancelled ones from duplicate check
+      status: { $in: [0, 2] } // CONFIRMED or COMPLETED
     });
 
     if (duplicateBooking) {
       return res.status(400).json({
         success: false,
-        message: 'You already have a booking at this hotel for the same day.'
+        message: 'You already have an active booking at this hotel for the same day.'
       });
     }
 

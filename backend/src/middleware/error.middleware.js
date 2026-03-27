@@ -3,9 +3,11 @@ const errorHandler = (err, req, res, next) => {
   let message = err.message || 'Server Error';
 
   // Specific error overrides
-  if (err.name === 'ValidationError') {
+  if (err.name === 'ValidationError' || err.errors) {
     statusCode = 400;
-    message = Object.values(err.errors).map(val => val.message).join(', ');
+    message = err.errors 
+      ? Object.values(err.errors).map(val => val.message).join(', ')
+      : err.message;
   }
 
   if (err.code === 11000) {
