@@ -1,6 +1,0 @@
-src/App.tsx(1,1): error TS6133: 'React' is declared but its value is never read.
-src/main.tsx(8,8): error TS2882: Cannot find module or type declarations for side-effect import of './index.css'.
-src/main.tsx(11,8): error TS2882: Cannot find module or type declarations for side-effect import of 'primereact/resources/themes/lara-light-indigo/theme.css'.
-src/main.tsx(12,8): error TS2882: Cannot find module or type declarations for side-effect import of 'primereact/resources/primereact.min.css'.
-src/main.tsx(13,8): error TS2882: Cannot find module or type declarations for side-effect import of 'primeicons/primeicons.css'.
-src/main.tsx(14,8): error TS2882: Cannot find module or type declarations for side-effect import of 'primeflex/primeflex.css'.
