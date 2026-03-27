@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { fetchBookings } from '../../api/booking.api';
+import { fetchBookings, fetchBookedUsers } from '../../api/booking.api';
 import { fetchUsers } from '../../api/user.api';
 import { fetchHotels } from '../../api/hotel.api';
 import ReusableTable from '../../components/ReusableTable';
@@ -36,10 +36,8 @@ const BookingsPage = () => {
     });
 
     const { data: usersData } = useQuery({
-        queryKey: ['allUsers'],
-        // For filter dropdown, ideally a separate dedicated API would return only booked users. 
-        // Using main users endpoint as requested in constraint setup.
-        queryFn: () => fetchUsers({ download: 'true' }) 
+        queryKey: ['bookedUsers'],
+        queryFn: fetchBookedUsers 
     });
 
     const { data: hotelsData } = useQuery({

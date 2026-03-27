@@ -118,3 +118,35 @@ exports.cancelBooking = async (req, res, next) => {
     next(error);
   }
 };
+ 
+exports.getBookedUsers = async (req, res, next) => {
+  try {
+    const bookedUsers = await Booking.aggregate([
+      { $group: { _id: '$userId' } },
+      {
+        $lookup: {
+          from: 'users',
+          localField: '_id',
+          foreignField: '_id',
+          as: 'userDetails'
+        }
+      },
+      { $unwind: '$userDetails' },
+      {
+        $project: {
+          _id: 1,
+          name: '$userDetails.name',
+          email: '$userDetails.email'
+        }
+      },
+      { $sort: { name: 1 } }
+    ]);
+
+    res.status(200).json({
+      success: true,
+      data: bookedUsers
+    });
+  } catch (error) {
+    next(error);
+  }
+};
