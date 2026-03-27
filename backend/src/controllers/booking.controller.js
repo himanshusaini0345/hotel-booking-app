@@ -1,10 +1,12 @@
 const Booking = require('../models/Booking');
 const ApiFeatures = require('../utils/apiFeatures');
+const { jsonToCsv } = require('../utils/csvUtils');
 
 exports.getBookings = async (req, res, next) => {
   try {
     let filter = {};
 
+    // Standard filters
     if (req.query.userId) filter.userId = req.query.userId;
     if (req.query.hotelId) filter.hotelId = req.query.hotelId;
     if (req.query.status) filter.status = req.query.status;
@@ -16,11 +18,25 @@ exports.getBookings = async (req, res, next) => {
       if (req.query.endDate) filter.checkInDate.$lte = new Date(req.query.endDate);
     }
 
-    const features = new ApiFeatures(Booking.find(filter).populate('userId', 'name email').populate('hotelId', 'name location cityId'), req.query)
+    const features = new ApiFeatures(
+      Booking.find(filter)
+        .populate('userId', 'name email')
+        .populate('hotelId', 'name location cityId'),
+      req.query
+    )
       .sort()
       .paginate();
 
     const bookings = await features.query;
+
+    // Handle Download
+    if (req.query.download === 'true') {
+      const csv = jsonToCsv(bookings);
+      res.setHeader('Content-Type', 'text/csv');
+      res.setHeader('Content-Disposition', 'attachment; filename=bookings.csv');
+      return res.status(200).send(csv);
+    }
+
     const total = await Booking.countDocuments(filter);
 
     res.status(200).json({

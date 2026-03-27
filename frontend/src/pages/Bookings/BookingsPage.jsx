@@ -7,7 +7,7 @@ import ReusableTable from '../../components/ReusableTable';
 import ReusableFilter from '../../components/ReusableFilter';
 import { Button } from 'primereact/button';
 import { Tag } from 'primereact/tag';
-import * as XLSX from 'xlsx';
+// Removed XLSX import as export is now handled by the backend
 
 const BookingsPage = () => {
     const [lazyParams, setLazyParams] = useState({
@@ -100,25 +100,25 @@ const BookingsPage = () => {
         { name: 'checkInDate', type: 'calendar-range', label: 'Check-in Date Range' }
     ];
 
-    const exportExcel = async () => {
+    const exportBookings = async () => {
         // Fetch all filtered data
         let exportFilters = { ...filterParams, download: 'true' };
         if (sortParams.sort) exportFilters.sort = sortParams.sort;
         
         try {
-            const response = await fetchBookings(exportFilters);
-            const exportData = response.data.map(booking => ({
-                'Guest Name': booking.userId?.name || 'N/A',
-                'Guest Email': booking.userId?.email || 'N/A',
-                'Hotel Name': booking.hotelId?.name || 'N/A',
-                'Check-in Date': new Date(booking.checkInDate).toLocaleDateString(),
-                'Status': getStatusLabel(booking.status),
-                'Booked On': new Date(booking.bookingDate).toLocaleDateString()
-            }));
-
-            const worksheet = XLSX.utils.json_to_sheet(exportData);
-            const workbook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
-            XLSX.writeFile(workbook, 'bookings_report.xlsx');
+            const response = await fetchBookings(exportFilters, true);
+            
+            // Create a link to download the blob
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'bookings_report.csv');
+            document.body.appendChild(link);
+            link.click();
+            
+            // Cleanup
+            link.remove();
+            window.URL.revokeObjectURL(url);
         } catch (error) {
             console.error('Failed to export', error);
         }
@@ -128,7 +128,7 @@ const BookingsPage = () => {
         <div>
             <div className="flex justify-content-between align-items-center mb-4">
                 <h2 className="m-0">Bookings Control</h2>
-                <Button label="Export Excel" icon="pi pi-file-excel" className="p-button-success" onClick={exportExcel} />
+                <Button label="Export CSV" icon="pi pi-file-excel" className="p-button-success" onClick={exportBookings} />
             </div>
             
             <ReusableFilter 

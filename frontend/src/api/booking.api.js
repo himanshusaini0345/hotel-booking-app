@@ -1,8 +1,12 @@
 import api from './axios';
 
-export const fetchBookings = async (params) => {
-    const { data } = await api.get('/bookings/getBookings', { params });
-    return data;
+export const fetchBookings = async (params, isDownload = false) => {
+    const config = { params };
+    if (isDownload) {
+        config.responseType = 'blob';
+    }
+    const response = await api.get('/bookings/getBookings', config);
+    return isDownload ? response : response.data;
 };
 
 export const createBooking = async (payload) => {
