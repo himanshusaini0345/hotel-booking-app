@@ -20,7 +20,7 @@ const UsersPage = () => {
 
     const [filterParams, setFilterParams] = useState({});
 
-    const { data, isLoading } = useQuery({
+    const { data, isLoading, isFetching } = useQuery({
         queryKey: ['users', lazyParams.page, lazyParams.rows, sortParams, filterParams],
         queryFn: () => fetchUsers({
             page: lazyParams.page,
@@ -64,7 +64,7 @@ const UsersPage = () => {
             <ReusableTable 
                 columns={columns}
                 data={data?.data || []}
-                loading={isLoading}
+                loading={isLoading || isFetching}
                 totalRecords={data?.total || 0}
                 lazyParams={lazyParams}
                 setLazyParams={setLazyParams}

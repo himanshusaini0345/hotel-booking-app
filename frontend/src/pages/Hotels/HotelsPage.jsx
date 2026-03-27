@@ -21,7 +21,7 @@ const HotelsPage = () => {
         sort: `${lazyParams.sortOrder === 1 ? '' : '-'}${lazyParams.sortField}` 
     } : {};
 
-    const { data: hotelsData, isLoading: hotelsLoading } = useQuery({
+    const { data: hotelsData, isLoading: hotelsLoading, isFetching: hotelsFetching } = useQuery({
         queryKey: ['hotels', lazyParams.page, lazyParams.rows, sortParams, filterParams],
         queryFn: () => fetchHotels({
             page: lazyParams.page,
@@ -89,7 +89,7 @@ const HotelsPage = () => {
             <ReusableTable 
                 columns={columns}
                 data={hotelsData?.data || []}
-                loading={hotelsLoading}
+                loading={hotelsLoading || hotelsFetching}
                 totalRecords={hotelsData?.total || 0}
                 lazyParams={lazyParams}
                 setLazyParams={setLazyParams}

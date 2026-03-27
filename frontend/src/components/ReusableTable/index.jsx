@@ -44,6 +44,7 @@ const ReusableTable = ({
                 sortField={lazyParams.sortField}
                 sortOrder={lazyParams.sortOrder}
                 loading={loading}
+                loadingIcon={<ProgressSpinner style={{ width: '50px', height: '50px' }} strokeWidth="8" fill="var(--surface-ground)" animationDuration=".5s" />}
                 emptyMessage={emptyMessage}
                 responsiveLayout="scroll"
                 rowsPerPageOptions={[5, 10, 20]}
