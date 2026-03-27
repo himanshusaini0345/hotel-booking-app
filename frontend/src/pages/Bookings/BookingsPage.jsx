@@ -88,11 +88,6 @@ const BookingsPage = () => {
             sortable: true,
             body: (rowData) => <Tag severity={getStatusSeverity(rowData.status)} value={getStatusLabel(rowData.status)} />
         },
-        {
-            field: 'actions',
-            header: 'Actions',
-            body: (rowData) => <Button icon="pi pi-eye" className="p-button-rounded p-button-info p-button-text" aria-label="View" />
-        }
     ];
 
     const formatOptions = (arr, labelKey = 'name') => arr && arr.data ? arr.data.map(item => ({ label: item[labelKey], value: item._id })) : [];
