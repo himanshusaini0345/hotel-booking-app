@@ -5,25 +5,26 @@ import { jsonToCsv } from '../utils/csvUtils';
 
 export const getBookings = async (req: Request, res: Response, next: NextFunction) => {
   try {
+    const { userId, hotelId, status, startDate, endDate, download, page, limit, sort } = req.query;
     let filter: any = {};
 
     // Standard filters
-    if (req.query.userId) filter.userId = req.query.userId;
-    if (req.query.hotelId) filter.hotelId = req.query.hotelId;
-    if (req.query.status) filter.status = req.query.status;
+    if (userId) filter.userId = userId;
+    if (hotelId) filter.hotelId = hotelId;
+    if (status) filter.status = status;
 
     // Date Range implementation
-    if (req.query.startDate || req.query.endDate) {
+    if (startDate || endDate) {
       filter.checkInDate = {};
-      if (req.query.startDate) filter.checkInDate.$gte = new Date(req.query.startDate as string);
-      if (req.query.endDate) filter.checkInDate.$lte = new Date(req.query.endDate as string);
+      if (startDate) filter.checkInDate.$gte = new Date(startDate as string);
+      if (endDate) filter.checkInDate.$lte = new Date(endDate as string);
     }
 
     const features = new ApiFeatures(
       Booking.find(filter)
         .populate('userId', 'name email')
         .populate('hotelId', 'name location cityId'),
-      req.query
+      { userId, hotelId, status, startDate, endDate, download, page, limit, sort }
     )
       .sort()
       .paginate();

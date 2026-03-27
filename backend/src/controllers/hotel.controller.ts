@@ -4,24 +4,25 @@ import ApiFeatures from '../utils/apiFeatures';
 
 export const getHotelList = async (req: Request, res: Response, next: NextFunction) => {
   try {
+    const { search, stateId, cityId, rating, isActive, page, limit, sort } = req.query;
     let filter: any = {};
 
     // Search Box for hotel name
-    if (req.query.search) {
-      filter.name = new RegExp(req.query.search as string, 'i');
+    if (search) {
+      filter.name = new RegExp(search as string, 'i');
     }
 
     // Exact match filters
-    if (req.query.stateId) filter.stateId = req.query.stateId;
-    if (req.query.cityId) filter.cityId = req.query.cityId;
-    if (req.query.rating) filter.rating = req.query.rating;
+    if (stateId) filter.stateId = stateId;
+    if (cityId) filter.cityId = cityId;
+    if (rating) filter.rating = rating;
     
     // Status (Active/Inactive)
-    if (req.query.isActive !== undefined) {
-      filter.isActive = req.query.isActive === 'true';
+    if (isActive !== undefined) {
+      filter.isActive = isActive === 'true';
     }
 
-    const features = new ApiFeatures(Hotel.find(filter).populate('cityId').populate('stateId'), req.query)
+    const features = new ApiFeatures(Hotel.find(filter).populate('cityId').populate('stateId'), { search, stateId, cityId, rating, isActive, page, limit, sort })
       .sort()
       .paginate();
 

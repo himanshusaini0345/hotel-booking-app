@@ -4,9 +4,10 @@ import ApiFeatures from '../utils/apiFeatures';
 
 export const getUserList = async (req: Request, res: Response, next: NextFunction) => {
   try {
+    const { page, limit, sort, search } = req.query;
     let filter: any = {};
-    if (req.query.search) {
-      const searchRegex = new RegExp(req.query.search as string, 'i');
+    if (search) {
+      const searchRegex = new RegExp(search as string, 'i');
       filter = {
         $or: [
           { name: searchRegex },
@@ -16,7 +17,7 @@ export const getUserList = async (req: Request, res: Response, next: NextFunctio
       };
     }
 
-    const features = new ApiFeatures(User.find(filter), req.query)
+    const features = new ApiFeatures(User.find(filter), { page, limit, sort, search })
       .sort()
       .paginate();
 
