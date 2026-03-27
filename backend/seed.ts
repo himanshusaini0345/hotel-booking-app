@@ -1,11 +1,11 @@
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
 
-const User = require('./src/models/User');
-const Hotel = require('./src/models/Hotel');
-const Booking = require('./src/models/Booking');
-const State = require('./src/models/State');
-const City = require('./src/models/City');
+import User from './src/models/User';
+import Hotel from './src/models/Hotel';
+import Booking from './src/models/Booking';
+import State from './src/models/State';
+import City from './src/models/City';
 
 dotenv.config();
 
@@ -13,7 +13,7 @@ const connectDB = async () => {
     try {
         await mongoose.connect(process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/hotel_task');
         console.log('MongoDB Connected for Seeding');
-    } catch (error) {
+    } catch (error: any) {
         console.error('Error connecting to MongoDB:', error.message);
         process.exit(1);
     }
@@ -44,8 +44,8 @@ const seedData = async () => {
             { name: 'Telangana', code: 'TG', cities: ['Hyderabad'] }
         ];
 
-        const allStates = [];
-        const allCities = [];
+        const allStates: any[] = [];
+        const allCities: any[] = [];
 
         for (const s of statesData) {
             const state = await State.create({ name: s.name, code: s.code, country: 'India' });
@@ -87,7 +87,7 @@ const seedData = async () => {
             'Royal Orchid Central', 'Pride Plaza'
         ];
 
-        const hotelsData = [];
+        const hotelsData: any[] = [];
         for (let i = 0; i < 25; i++) {
             const randomCity = allCities[Math.floor(Math.random() * allCities.length)];
             const stateId = randomCity.stateId;
@@ -109,7 +109,7 @@ const seedData = async () => {
         console.log(`Seeded ${hotels.length} Hotels.`);
 
         // 4. Seed Bookings (25 Entries)
-        const bookingsData = [];
+        const bookingsData: any[] = [];
         for (let i = 0; i < 25; i++) {
             const randomUser = users[Math.floor(Math.random() * users.length)];
             const randomHotel = hotels[Math.floor(Math.random() * hotels.length)];

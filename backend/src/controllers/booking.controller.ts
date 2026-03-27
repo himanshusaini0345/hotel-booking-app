@@ -1,10 +1,11 @@
-const Booking = require('../models/Booking');
-const ApiFeatures = require('../utils/apiFeatures');
-const { jsonToCsv } = require('../utils/csvUtils');
+import { Request, Response, NextFunction } from 'express';
+import Booking from '../models/Booking';
+import ApiFeatures from '../utils/apiFeatures';
+import { jsonToCsv } from '../utils/csvUtils';
 
-exports.getBookings = async (req, res, next) => {
+export const getBookings = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    let filter = {};
+    let filter: any = {};
 
     // Standard filters
     if (req.query.userId) filter.userId = req.query.userId;
@@ -14,8 +15,8 @@ exports.getBookings = async (req, res, next) => {
     // Date Range implementation
     if (req.query.startDate || req.query.endDate) {
       filter.checkInDate = {};
-      if (req.query.startDate) filter.checkInDate.$gte = new Date(req.query.startDate);
-      if (req.query.endDate) filter.checkInDate.$lte = new Date(req.query.endDate);
+      if (req.query.startDate) filter.checkInDate.$gte = new Date(req.query.startDate as string);
+      if (req.query.endDate) filter.checkInDate.$lte = new Date(req.query.endDate as string);
     }
 
     const features = new ApiFeatures(
@@ -28,7 +29,7 @@ exports.getBookings = async (req, res, next) => {
       .paginate();
 
     const rawBookings = await features.query;
-    const bookings = rawBookings.map(b => b.toJSON());
+    const bookings = rawBookings.map((b: any) => b.toJSON());
 
     // Handle Download
     if (req.query.download === 'true') {
@@ -51,7 +52,7 @@ exports.getBookings = async (req, res, next) => {
   }
 };
 
-exports.createBooking = async (req, res, next) => {
+export const createBooking = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { userId, hotelId, checkInDate, numberOfGuests, specialRequests } = req.body;
 
@@ -110,7 +111,7 @@ exports.createBooking = async (req, res, next) => {
   }
 };
 
-exports.cancelBooking = async (req, res, next) => {
+export const cancelBooking = async (req: Request, res: Response, next: NextFunction) => {
   try {
     let booking = await Booking.findById(req.params.bookingId);
 
@@ -134,7 +135,7 @@ exports.cancelBooking = async (req, res, next) => {
   }
 };
  
-exports.getBookedUsers = async (req, res, next) => {
+export const getBookedUsers = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const bookedUsers = await Booking.aggregate([
       { $group: { _id: '$userId' } },

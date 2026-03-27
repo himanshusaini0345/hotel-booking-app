@@ -1,13 +1,11 @@
-const request = require('supertest');
-const mongoose = require('mongoose');
-const app = require('../app');
-const dotenv = require('dotenv');
+import request from 'supertest';
+import mongoose from 'mongoose';
+import app from '../app';
+import dotenv from 'dotenv';
 
 dotenv.config();
 
 describe('API Endpoints Validation', () => {
-  let server;
-
   beforeAll(async () => {
     // Connect to the database before running tests
     const mongoUri = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/hotel_task';

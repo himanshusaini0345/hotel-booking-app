@@ -1,8 +1,9 @@
-const City = require('../models/City');
+import { Request, Response, NextFunction } from 'express';
+import City from '../models/City';
 
-exports.getCities = async (req, res, next) => {
+export const getCities = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    let filter = {};
+    let filter: any = {};
     if (req.query.stateId) {
       filter.stateId = req.query.stateId;
     }

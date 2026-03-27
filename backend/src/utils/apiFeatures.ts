@@ -1,31 +1,26 @@
 class ApiFeatures {
-  constructor(query, queryString) {
+  query: any;
+  queryString: any;
+
+  constructor(query: any, queryString: any) {
     this.query = query;
     this.queryString = queryString;
   }
 
-  filter() {
+  filter(): this {
     const queryObj = { ...this.queryString };
     const excludedFields = ['page', 'sort', 'limit', 'fields', 'search'];
     excludedFields.forEach(el => delete queryObj[el]);
 
-    // Handle search text properly for different endpoints (custom handling needed)
     let queryStr = JSON.stringify(queryObj);
     queryStr = queryStr.replace(/\b(gte|gt|lte|lt|options|regex)\b/g, match => `$${match}`);
     let parsedQuery = JSON.parse(queryStr);
-
-    // Apply regex properly if passed from client
-    Object.keys(parsedQuery).forEach(key => {
-        if(parsedQuery[key] && typeof parsedQuery[key] === 'string' && parsedQuery[key].startsWith('/')) {
-            // Very simplistic - better to handle regex in controller
-        }
-    });
 
     this.query = this.query.find(parsedQuery);
     return this;
   }
 
-  sort() {
+  sort(): this {
     if (this.queryString.sort) {
       const sortBy = this.queryString.sort.split(',').join(' ');
       this.query = this.query.sort(sortBy);
@@ -35,8 +30,7 @@ class ApiFeatures {
     return this;
   }
 
-  paginate() {
-    // If download flag is true, skip pagination
+  paginate(): this {
     if(this.queryString.download === 'true') {
       return this;
     }
@@ -49,4 +43,4 @@ class ApiFeatures {
   }
 }
 
-module.exports = ApiFeatures;
+export default ApiFeatures;

@@ -1,6 +1,14 @@
-const mongoose = require('mongoose');
+import mongoose, { Schema, Document } from 'mongoose';
 
-const stateSchema = new mongoose.Schema({
+export interface IState extends Document {
+  name: string;
+  code: string;
+  country: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const stateSchema: Schema = new Schema({
   name: { type: String, required: true },
   code: { type: String, required: true },
   country: { type: String, required: true }
@@ -24,4 +32,4 @@ stateSchema.set('toObject', {
   }
 });
 
-module.exports = mongoose.model('State', stateSchema);
+export default mongoose.model<IState>('State', stateSchema);

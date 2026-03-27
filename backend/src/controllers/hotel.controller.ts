@@ -1,13 +1,14 @@
-const Hotel = require('../models/Hotel');
-const ApiFeatures = require('../utils/apiFeatures');
+import { Request, Response, NextFunction } from 'express';
+import Hotel from '../models/Hotel';
+import ApiFeatures from '../utils/apiFeatures';
 
-exports.getHotelList = async (req, res, next) => {
+export const getHotelList = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    let filter = {};
+    let filter: any = {};
 
     // Search Box for hotel name
     if (req.query.search) {
-      filter.name = new RegExp(req.query.search, 'i');
+      filter.name = new RegExp(req.query.search as string, 'i');
     }
 
     // Exact match filters

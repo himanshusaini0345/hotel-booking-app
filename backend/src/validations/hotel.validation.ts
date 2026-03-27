@@ -1,6 +1,6 @@
-const { query } = require('express-validator');
+import { query } from 'express-validator';
 
-exports.getHotelsValidation = [
+export const getHotelsValidation = [
   query('search').optional().isString().trim(),
   query('stateId').optional().isMongoId().withMessage('Invalid State ID'),
   query('cityId').optional().isMongoId().withMessage('Invalid City ID'),

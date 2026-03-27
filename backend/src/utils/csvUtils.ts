@@ -1,9 +1,9 @@
 /**
  * Convert an array of objects to CSV format.
- * @param {Array} data - Array of objects to convert.
- * @returns {string} CSV formatted string.
+ * @param data - Array of objects to convert.
+ * @returns CSV formatted string.
  */
-const jsonToCsv = (data) => {
+export const jsonToCsv = (data: any[]): string => {
   if (!data || data.length === 0) {
     return "";
   }
@@ -22,7 +22,7 @@ const jsonToCsv = (data) => {
     "Special Requests"
   ];
 
-  const statusMap = {
+  const statusMap: { [key: number]: string } = {
     0: "CONFIRMED",
     1: "CANCELLED",
     2: "COMPLETED"
@@ -45,5 +45,3 @@ const jsonToCsv = (data) => {
 
   return [headers.join(","), ...rows].join("\n");
 };
-
-module.exports = { jsonToCsv };

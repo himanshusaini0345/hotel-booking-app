@@ -1,10 +1,25 @@
-const mongoose = require('mongoose');
+import mongoose, { Schema, Document } from 'mongoose';
 
-const hotelSchema = new mongoose.Schema({
+export interface IHotel extends Document {
+  name: string;
+  location: string;
+  cityId: mongoose.Types.ObjectId;
+  stateId: mongoose.Types.ObjectId;
+  country: string;
+  rating?: number;
+  amenities: string[];
+  pricePerNight: number;
+  description?: string;
+  isActive: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const hotelSchema: Schema = new Schema({
   name: { type: String, required: true },
   location: { type: String, required: true },
-  cityId: { type: mongoose.Schema.Types.ObjectId, ref: 'City', required: true },
-  stateId: { type: mongoose.Schema.Types.ObjectId, ref: 'State', required: true },
+  cityId: { type: Schema.Types.ObjectId, ref: 'City', required: true },
+  stateId: { type: Schema.Types.ObjectId, ref: 'State', required: true },
   country: { type: String, default: 'India' },
   rating: { type: Number, min: 1, max: 5 },
   amenities: [{ type: String }],
@@ -31,4 +46,4 @@ hotelSchema.set('toObject', {
   }
 });
 
-module.exports = mongoose.model('Hotel', hotelSchema);
+export default mongoose.model<IHotel>('Hotel', hotelSchema);

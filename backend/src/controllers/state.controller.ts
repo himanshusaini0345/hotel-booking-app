@@ -1,6 +1,7 @@
-const State = require('../models/State');
+import { Request, Response, NextFunction } from 'express';
+import State from '../models/State';
 
-exports.getStates = async (req, res, next) => {
+export const getStates = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const states = await State.find().sort('name');
     res.status(200).json({

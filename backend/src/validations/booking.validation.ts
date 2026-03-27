@@ -1,6 +1,6 @@
-const { body, query, param } = require('express-validator');
+import { body, query, param } from 'express-validator';
 
-exports.createBookingValidation = [
+export const createBookingValidation = [
   body('userId').isMongoId().withMessage('Invalid User ID'),
   body('hotelId').isMongoId().withMessage('Invalid Hotel ID'),
   body('checkInDate')
@@ -26,7 +26,7 @@ exports.createBookingValidation = [
     .withMessage('Special requests must be less than 500 characters')
 ];
 
-exports.getBookingsValidation = [
+export const getBookingsValidation = [
   query('userId').optional().isMongoId().withMessage('Invalid User ID'),
   query('hotelId').optional().isMongoId().withMessage('Invalid Hotel ID'),
   query('status').optional().isInt().withMessage('Status must be an integer'),
@@ -37,6 +37,6 @@ exports.getBookingsValidation = [
   query('download').optional().isBoolean().withMessage('Download must be a boolean')
 ];
 
-exports.cancelBookingValidation = [
+export const cancelBookingValidation = [
   param('bookingId').isMongoId().withMessage('Invalid Booking ID')
 ];

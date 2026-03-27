@@ -1,11 +1,12 @@
-const User = require('../models/User');
-const ApiFeatures = require('../utils/apiFeatures');
+import { Request, Response, NextFunction } from 'express';
+import User from '../models/User';
+import ApiFeatures from '../utils/apiFeatures';
 
-exports.getUserList = async (req, res, next) => {
+export const getUserList = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    let filter = {};
+    let filter: any = {};
     if (req.query.search) {
-      const searchRegex = new RegExp(req.query.search, 'i');
+      const searchRegex = new RegExp(req.query.search as string, 'i');
       filter = {
         $or: [
           { name: searchRegex },

@@ -1,4 +1,6 @@
-const errorHandler = (err, req, res, next) => {
+import { Request, Response, NextFunction } from 'express';
+
+const errorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
   let statusCode = res.statusCode === 200 ? 500 : res.statusCode;
   let message = err.message || 'Server Error';
 
@@ -6,7 +8,7 @@ const errorHandler = (err, req, res, next) => {
   if (err.name === 'ValidationError' || err.errors) {
     statusCode = 400;
     message = err.errors 
-      ? Object.values(err.errors).map(val => val.message).join(', ')
+      ? Object.values(err.errors).map((val: any) => val.message).join(', ')
       : err.message;
   }
 
@@ -27,4 +29,4 @@ const errorHandler = (err, req, res, next) => {
   });
 };
 
-module.exports = errorHandler;
+export default errorHandler;
