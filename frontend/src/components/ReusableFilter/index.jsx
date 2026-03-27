@@ -44,6 +44,7 @@ const ReusableFilter = ({ filtersConfig, onApply, onClear }) => {
                                 options={options} 
                                 onChange={(e) => setFilterValues({ ...filterValues, [name]: e.value })} 
                                 optionLabel="label" 
+                                optionValue="value"
                                 style={{ width: '100%' }}
                                 showClear
                             />

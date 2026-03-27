@@ -62,7 +62,7 @@ const HotelsPage = () => {
         }
     ];
 
-    const formatFilterOptions = (arr) => arr ? arr.map(item => ({ label: item.name, value: item._id })) : [];
+    const formatFilterOptions = (arr) => arr ? arr.map(item => ({ label: item.name, value: item.id })) : [];
 
     const filtersConfig = [
         { name: 'search', type: 'text', label: 'Search Hotel' },

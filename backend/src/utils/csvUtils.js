@@ -30,7 +30,7 @@ const jsonToCsv = (data) => {
 
   const rows = data.map(booking => {
     return [
-      booking._id,
+      booking.id,
       booking.userId?.name || "N/A",
       booking.userId?.email || "N/A",
       booking.hotelId?.name || "N/A",

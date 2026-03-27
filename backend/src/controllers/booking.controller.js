@@ -27,7 +27,8 @@ exports.getBookings = async (req, res, next) => {
       .sort()
       .paginate();
 
-    const bookings = await features.query;
+    const rawBookings = await features.query;
+    const bookings = rawBookings.map(b => b.toJSON());
 
     // Handle Download
     if (req.query.download === 'true') {
@@ -150,7 +151,8 @@ exports.getBookedUsers = async (req, res, next) => {
       { $unwind: '$userDetails' },
       {
         $project: {
-          _id: 1,
+          _id: 0,
+          id: '$_id',
           name: '$userDetails.name',
           email: '$userDetails.email'
         }

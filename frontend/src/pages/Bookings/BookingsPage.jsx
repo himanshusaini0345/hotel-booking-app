@@ -90,7 +90,7 @@ const BookingsPage = () => {
         },
     ];
 
-    const formatOptions = (arr, labelKey = 'name') => arr && arr.data ? arr.data.map(item => ({ label: item[labelKey], value: item._id })) : [];
+    const formatOptions = (arr, labelKey = 'name') => arr && arr.data ? arr.data.map(item => ({ label: item[labelKey], value: item.id })) : [];
 
     // Assuming we extract available users from the loaded users.
     const filtersConfig = [
