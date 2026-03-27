@@ -22,7 +22,7 @@ const ReusableFilter = ({ filtersConfig, onApply, onClear }) => {
         switch (type) {
             case 'text':
                 return (
-                    <div className="field col-12 md:col-3" key={name}>
+                    <div className="field col-12 md:col-6 lg:col-3" key={name}>
                         <span className="p-float-label">
                             <InputText 
                                 id={name} 
@@ -36,7 +36,7 @@ const ReusableFilter = ({ filtersConfig, onApply, onClear }) => {
                 );
             case 'dropdown':
                 return (
-                    <div className="field col-12 md:col-3" key={name}>
+                    <div className="field col-12 md:col-6 lg:col-3" key={name}>
                         <span className="p-float-label">
                             <Dropdown 
                                 id={name} 
@@ -53,7 +53,7 @@ const ReusableFilter = ({ filtersConfig, onApply, onClear }) => {
                 );
             case 'calendar-range':
                 return (
-                    <div className="field col-12 md:col-4" key={name}>
+                    <div className="field col-12 md:col-12 lg:col-3" key={name}>
                         <span className="p-float-label">
                             <Calendar 
                                 id={name} 
@@ -77,7 +77,7 @@ const ReusableFilter = ({ filtersConfig, onApply, onClear }) => {
         <div className="card mb-4">
             <div className="p-fluid formgrid grid align-items-end">
                 {filtersConfig.map(renderFilter)}
-                <div className="field col-12 md:col-2 flex gap-2">
+                <div className="field col-12 md:col-12 lg:col-3 flex gap-2">
                     <Button label="Apply" icon="pi pi-filter" onClick={handleApply} className="p-button-primary" />
                     <Button label="Clear" icon="pi pi-times" onClick={handleClear} className="p-button-outlined p-button-secondary" />
                 </div>
