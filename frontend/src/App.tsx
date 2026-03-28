@@ -7,20 +7,23 @@ import UsersPage from './pages/Users/UsersPage';
 import HotelsPage from './pages/Hotels/HotelsPage';
 import BookingsPage from './pages/Bookings/BookingsPage';
 
+const NAV_ITEMS = [
+    { label: 'Users', icon: 'pi pi-users', path: '/users', element: <UsersPage /> },
+    { label: 'Hotels', icon: 'pi pi-building', path: '/hotels', element: <HotelsPage /> },
+    { label: 'Bookings', icon: 'pi pi-calendar', path: '/bookings', element: <BookingsPage /> }
+];
+
 const App = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const items = [
-        { label: 'Users', icon: 'pi pi-users', command: () => navigate('/users') },
-        { label: 'Hotels', icon: 'pi pi-building', command: () => navigate('/hotels') },
-        { label: 'Bookings', icon: 'pi pi-calendar', command: () => navigate('/bookings') }
-    ];
+    // Determine the active index based on the current location
+    const activeIndex = NAV_ITEMS.findIndex(item => location.pathname.startsWith(item.path));
+    const normalizedIndex = activeIndex >= 0 ? activeIndex : 0;
 
-    // Find active index
-    let activeIndex = 0;
-    if (location.pathname.startsWith('/hotels')) activeIndex = 1;
-    if (location.pathname.startsWith('/bookings')) activeIndex = 2;
+    const onTabChange = (e: { index: number }) => {
+        navigate(NAV_ITEMS[e.index].path);
+    };
 
     return (
         <div className="layout-wrapper" style={{ padding: '2rem' }}>
@@ -29,12 +32,17 @@ const App = () => {
             </h1>
             
             <div className="card">
-                <TabMenu model={items} activeIndex={activeIndex} style={{ marginBottom: '2rem' }} />
+                <TabMenu 
+                    model={NAV_ITEMS} 
+                    activeIndex={normalizedIndex} 
+                    onTabChange={onTabChange}
+                    style={{ marginBottom: '2rem' }} 
+                />
                 
                 <Routes>
-                    <Route path="/users" element={<UsersPage />} />
-                    <Route path="/hotels" element={<HotelsPage />} />
-                    <Route path="/bookings" element={<BookingsPage />} />
+                    {NAV_ITEMS.map(item => (
+                        <Route key={item.path} path={item.path} element={item.element} />
+                    ))}
                     <Route path="/" element={<Navigate to="/users" replace />} />
                 </Routes>
             </div>
