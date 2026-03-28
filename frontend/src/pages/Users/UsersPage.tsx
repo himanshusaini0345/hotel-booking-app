@@ -1,10 +1,17 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { fetchUsers } from '../../api/user.api';
 import ReusableTable from '../../components/ReusableTable';
 import ReusableFilter from '../../components/ReusableFilter';
 
 const UsersPage = () => {
+    useEffect(() => {
+        document.title = "Users | Hotel Booking App";
+
+        return () => { document.title = "Hotel Booking App"; };
+    }, []);
+
+
     const [lazyParams, setLazyParams] = useState({
         first: 0,
         rows: 10,
@@ -12,10 +19,10 @@ const UsersPage = () => {
         sortField: null,
         sortOrder: null,
     });
-    
+
     // Sort formatting for backend e.g sort=name or -name
-    const sortParams = lazyParams.sortField ? { 
-        sort: `${lazyParams.sortOrder === 1 ? '' : '-'}${lazyParams.sortField}` 
+    const sortParams = lazyParams.sortField ? {
+        sort: `${lazyParams.sortOrder === 1 ? '' : '-'}${lazyParams.sortField}`
     } : {};
 
     const [filterParams, setFilterParams] = useState<any>({});
@@ -35,9 +42,9 @@ const UsersPage = () => {
         { field: 'name', header: 'Name', sortable: true },
         { field: 'email', header: 'Email', sortable: true },
         { field: 'phone', header: 'Phone', sortable: false },
-        { 
-            field: 'createdAt', 
-            header: 'Created Date', 
+        {
+            field: 'createdAt',
+            header: 'Created Date',
             sortable: true,
             body: (rowData: any) => new Date(rowData.createdAt).toLocaleDateString()
         }
@@ -50,18 +57,18 @@ const UsersPage = () => {
     return (
         <div>
             <h2>Users Hub</h2>
-            <ReusableFilter 
-                filtersConfig={filtersConfig} 
+            <ReusableFilter
+                filtersConfig={filtersConfig}
                 onApply={(filters: any) => {
                     setFilterParams(filters);
                     setLazyParams(prev => ({ ...prev, first: 0, page: 1 }));
-                }} 
+                }}
                 onClear={() => {
                     setFilterParams({});
                     setLazyParams(prev => ({ ...prev, first: 0, page: 1 }));
                 }}
             />
-            <ReusableTable 
+            <ReusableTable
                 columns={columns}
                 data={(data as any)?.data || []}
                 loading={isLoading || isFetching}

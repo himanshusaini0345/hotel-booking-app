@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { fetchBookings, fetchBookedUsers } from '../../api/booking.api';
 import { fetchHotels } from '../../api/hotel.api';
@@ -9,6 +9,13 @@ import { Tag } from 'primereact/tag';
 // Removed XLSX import as export is now handled by the backend
 
 const BookingsPage = () => {
+    useEffect(() => {
+        document.title = "Bookings | Hotel Booking App";
+
+        return () => { document.title = "Hotel Booking App"; };
+    }, []); 
+
+
     const [lazyParams, setLazyParams] = useState({
         first: 0,
         rows: 10,
