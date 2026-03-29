@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { fetchHotels } from '../../api/hotel.api';
 import { fetchStates, fetchCities } from '../../api/location.api';
 import ReusableTable from '../../components/ReusableTable';
 import ReusableFilter from '../../components/ReusableFilter';
 import { Tag } from 'primereact/tag';
+import { useUrlState } from '../../hooks/useUrlState';
 
 const HotelsPage = () => {
     useEffect(() => {
@@ -14,15 +15,7 @@ const HotelsPage = () => {
     }, []);
 
 
-    const [lazyParams, setLazyParams] = useState({
-        first: 0,
-        rows: 10,
-        page: 1,
-        sortField: null,
-        sortOrder: null,
-    });
-
-    const [filterParams, setFilterParams] = useState<any>({});
+    const { lazyParams, filterParams, updateUrl } = useUrlState('hotels');
 
     const sortParams = lazyParams.sortField ? {
         sort: `${lazyParams.sortOrder === 1 ? '' : '-'}${lazyParams.sortField}`
@@ -84,13 +77,12 @@ const HotelsPage = () => {
             <h2>Hotels Portfolio</h2>
             <ReusableFilter
                 filtersConfig={filtersConfig}
+                initialValues={filterParams}
                 onApply={(filters: any) => {
-                    setFilterParams(filters);
-                    setLazyParams(prev => ({ ...prev, first: 0, page: 1 }));
+                    updateUrl({ ...lazyParams, first: 0, page: 1 }, filters);
                 }}
                 onClear={() => {
-                    setFilterParams({});
-                    setLazyParams(prev => ({ ...prev, first: 0, page: 1 }));
+                    updateUrl({ ...lazyParams, first: 0, page: 1 }, {});
                 }}
             />
             <ReusableTable
@@ -99,7 +91,7 @@ const HotelsPage = () => {
                 loading={hotelsLoading || hotelsFetching}
                 totalRecords={(hotelsData as any)?.total || 0}
                 lazyParams={lazyParams}
-                setLazyParams={setLazyParams}
+                setLazyParams={(newLazy: any) => updateUrl(newLazy, filterParams)}
             />
         </div>
     );

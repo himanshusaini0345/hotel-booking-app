@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { InputText } from 'primereact/inputtext';
 import { Dropdown } from 'primereact/dropdown';
 import { Calendar } from 'primereact/calendar';
@@ -8,10 +8,17 @@ interface ReusableFilterProps {
     filtersConfig: any[];
     onApply: (values: any) => void;
     onClear: () => void;
+    initialValues?: any;
 }
 
-const ReusableFilter: React.FC<ReusableFilterProps> = ({ filtersConfig, onApply, onClear }) => {
-    const [filterValues, setFilterValues] = useState({});
+const ReusableFilter: React.FC<ReusableFilterProps> = ({ filtersConfig, onApply, onClear, initialValues }) => {
+    const [filterValues, setFilterValues] = React.useState(initialValues || {});
+
+    React.useEffect(() => {
+        if (initialValues) {
+            setFilterValues(initialValues);
+        }
+    }, [initialValues]);
 
     const handleApply = () => {
         onApply(filterValues);

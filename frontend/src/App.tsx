@@ -6,11 +6,12 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import UsersPage from './pages/Users/UsersPage';
 import HotelsPage from './pages/Hotels/HotelsPage';
 import BookingsPage from './pages/Bookings/BookingsPage';
+import { useNavigationStore } from './store/navigationStore';
 
 const NAV_ITEMS = [
-    { label: 'Users', icon: 'pi pi-users', path: '/users', element: <UsersPage /> },
-    { label: 'Hotels', icon: 'pi pi-building', path: '/hotels', element: <HotelsPage /> },
-    { label: 'Bookings', icon: 'pi pi-calendar', path: '/bookings', element: <BookingsPage /> }
+    { label: 'Users', icon: 'pi pi-users', path: '/users', key: 'users', element: <UsersPage /> },
+    { label: 'Hotels', icon: 'pi pi-building', path: '/hotels', key: 'hotels', element: <HotelsPage /> },
+    { label: 'Bookings', icon: 'pi pi-calendar', path: '/bookings', key: 'bookings', element: <BookingsPage /> }
 ];
 
 const App = () => {
@@ -21,8 +22,12 @@ const App = () => {
     const activeIndex = NAV_ITEMS.findIndex(item => location.pathname.startsWith(item.path));
     const normalizedIndex = activeIndex >= 0 ? activeIndex : 0;
 
+    const lastUrls = useNavigationStore(state => state.lastUrls);
+
     const onTabChange = (e: { index: number }) => {
-        navigate(NAV_ITEMS[e.index].path);
+        const item = NAV_ITEMS[e.index];
+        const targetUrl = lastUrls[item.key] || item.path;
+        navigate(targetUrl);
     };
 
     return (

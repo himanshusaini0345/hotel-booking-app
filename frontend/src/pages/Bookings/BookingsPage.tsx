@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { fetchBookings, fetchBookedUsers } from '../../api/booking.api';
 import { fetchHotels } from '../../api/hotel.api';
@@ -6,6 +6,7 @@ import ReusableTable from '../../components/ReusableTable';
 import ReusableFilter from '../../components/ReusableFilter';
 import { Button } from 'primereact/button';
 import { Tag } from 'primereact/tag';
+import { useUrlState } from '../../hooks/useUrlState';
 // Removed XLSX import as export is now handled by the backend
 
 const BookingsPage = () => {
@@ -16,15 +17,7 @@ const BookingsPage = () => {
     }, []); 
 
 
-    const [lazyParams, setLazyParams] = useState({
-        first: 0,
-        rows: 10,
-        page: 1,
-        sortField: null,
-        sortOrder: null,
-    });
-    
-    const [filterParams, setFilterParams] = useState<any>({});
+    const { lazyParams, filterParams, updateUrl } = useUrlState('bookings');
 
     const sortParams = lazyParams.sortField ? { 
         sort: `${lazyParams.sortOrder === 1 ? '' : '-'}${lazyParams.sortField}` 
@@ -139,6 +132,7 @@ const BookingsPage = () => {
             
             <ReusableFilter 
                 filtersConfig={filtersConfig} 
+                initialValues={filterParams}
                 onApply={(filters: any) => {
                     // map calendar-range to startDate, endDate
                     const processed = {...filters};
@@ -147,12 +141,10 @@ const BookingsPage = () => {
                         processed.endDate = filters.checkInDate[1]?.toISOString();
                         delete processed.checkInDate;
                     }
-                    setFilterParams(processed);
-                    setLazyParams(prev => ({ ...prev, first: 0, page: 1 }));
+                    updateUrl({ ...lazyParams, first: 0, page: 1 }, processed);
                 }} 
                 onClear={() => {
-                    setFilterParams({});
-                    setLazyParams(prev => ({ ...prev, first: 0, page: 1 }));
+                    updateUrl({ ...lazyParams, first: 0, page: 1 }, {});
                 }}
             />
             
@@ -162,7 +154,7 @@ const BookingsPage = () => {
                 loading={bookingsLoading || bookingsFetching}
                 totalRecords={(bookingsData as any)?.total || 0}
                 lazyParams={lazyParams}
-                setLazyParams={setLazyParams}
+                setLazyParams={(newLazy: any) => updateUrl(newLazy, filterParams)}
             />
         </div>
     );
