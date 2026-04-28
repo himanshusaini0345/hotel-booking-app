@@ -22,23 +22,7 @@ const bookingSchema: Schema = new Schema({
   bookingDate: { type: Date, default: Date.now },
   specialRequests: { type: String }
 }, { timestamps: true });
-
-bookingSchema.set('toJSON', {
-  transform: (doc, ret) => {
-    ret.id = ret._id;
-    delete ret._id;
-    delete ret.__v;
-    return ret;
-  }
-});
-
-bookingSchema.set('toObject', {
-  transform: (doc, ret) => {
-    ret.id = ret._id;
-    delete ret._id;
-    delete ret.__v;
-    return ret;
-  }
-});
+
+
 
 export default mongoose.model<IBooking>('Booking', bookingSchema);

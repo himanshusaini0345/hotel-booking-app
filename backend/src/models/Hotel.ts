@@ -27,23 +27,7 @@ const hotelSchema: Schema = new Schema({
   description: { type: String },
   isActive: { type: Boolean, default: true }
 }, { timestamps: true });
-
-hotelSchema.set('toJSON', {
-  transform: (doc, ret) => {
-    ret.id = ret._id;
-    delete ret._id;
-    delete ret.__v;
-    return ret;
-  }
-});
-
-hotelSchema.set('toObject', {
-  transform: (doc, ret) => {
-    ret.id = ret._id;
-    delete ret._id;
-    delete ret.__v;
-    return ret;
-  }
-});
+
+
 
 export default mongoose.model<IHotel>('Hotel', hotelSchema);
